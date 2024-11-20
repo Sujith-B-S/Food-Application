@@ -1,0 +1,44 @@
+package com.sg.restaurantdaoimpl;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.List;
+
+import com.sg.dbutil.MyConnection;
+import com.sg.restaurantdao.RestaurantDAO;
+import com.sg.restaurantpojo.Restaurant;
+
+public class RestaurantDAOImpl implements RestaurantDAO{
+
+	String fetchAllQuery = "select * from `restaurant`";
+	private Connection con;
+	private Statement stmt;
+
+	public RestaurantDAOImpl() {
+		
+		try {
+			
+			con = MyConnection.connect();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Override
+	public List<Restaurant> fetchAll() {
+		
+		try {
+			stmt = con.createStatement();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
+	
+	
+
+}

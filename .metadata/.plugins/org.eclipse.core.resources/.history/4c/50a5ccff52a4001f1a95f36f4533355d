@@ -1,0 +1,14 @@
+package com.sg.cartdaoimpl;
+
+import java.util.Map;
+
+public class CartDAOImpl {
+	
+	private Map<Integer,Integer> items;
+	
+	public CartDAOImpl() {
+		
+		this.items = new Map<Integer,Integer>();
+	}
+
+}

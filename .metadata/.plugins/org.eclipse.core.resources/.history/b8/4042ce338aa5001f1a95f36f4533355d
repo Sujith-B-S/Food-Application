@@ -1,0 +1,36 @@
+package com.sg.updateorderitemdaoimpl;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+
+import com.sg.cartitempojo.CartItem;
+import com.sg.dbutil.MyConnection;
+
+public class UpdateOrderItemDAOImpl {
+	
+	private final String UPDATE_QUERY = "update `orderitems` set `quantity` = ? where `orderItemId` = ?";
+	private Connection con;
+	private PreparedStatement pstmt;
+	
+	
+	public UpdateOrderItemDAOImpl() {
+
+		con = MyConnection.connect();
+	}
+	
+	public int updateOrderItem(CartItem oi) {
+
+		try {
+			
+			pstmt = con.prepareStatement(UPDATE_QUERY);
+			pstmt.setInt(1, oi.getQuantity());
+			pstmt.setInt(2, oi.getOrderItemId());
+			status = pstmt.executeUpdate();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return status;
+	}
+
+}

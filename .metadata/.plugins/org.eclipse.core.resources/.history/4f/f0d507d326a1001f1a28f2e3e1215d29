@@ -1,0 +1,5 @@
+package com.sg.userpojo;
+
+public class User {
+
+}

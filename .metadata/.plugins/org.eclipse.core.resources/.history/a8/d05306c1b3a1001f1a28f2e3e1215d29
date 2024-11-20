@@ -1,0 +1,27 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Register Page</title>
+</head>
+<body>
+
+<% String errorMessage = (String) request.getAttribute("errorMessage"); %>
+<% if (errorMessage != null) { %>
+    <p style="color:red;"><%= errorMessage %></p>
+<% } %>
+
+<form action="validation" method="POST">
+    User Name : <input type="text" name="name"><br><br>
+    Email : <input type="text" name="email"><br><br>
+    Password : <input type="password" name="password"><br><br>
+    Confirm Password : <input type="password" name="cpassword"><br><br>
+    Mobile Number : <input type="text" name="mobile"><br><br>
+    Address : <input type="text" name="address"><br><br>
+    <input type="submit" value="Register">
+</form>
+Already registered? &nbsp; <a href="login.jsp">Login</a>
+</body>
+</html>

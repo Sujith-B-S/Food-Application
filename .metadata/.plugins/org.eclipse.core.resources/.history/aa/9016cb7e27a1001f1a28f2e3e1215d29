@@ -1,0 +1,167 @@
+package com.sg.userdaoimpl;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.mysql.cj.xdevapi.Statement;
+import com.sg.userdao.UserDAO;
+import com.sg.userpojo.User;
+
+public class UserDAOImpl implements UserDAO{
+	
+	List<User> userList = new ArrayList<User>();
+	private final String INSERT_QUERY = "insert into `user`(`uid`,`username`,`email`,`password`,`mobile`) values (?,?,?,?,?)";
+	private final String FETCH_ALL_QUERY = "select * from `user`";
+	private final String FETCH_SPECIFIC_QUERY = "select * from `user` where `uid` = ?";
+	private final String UPDATE_QUERY = "update `user` set `email` = ? where `uid` = ?";
+	private final String DELETE_QUERY = "delete from `user` where `uid` = ?";
+	
+	
+
+	private String url = "jdbc:mysql://localhost:3306/foodclone";
+	private String nm = "root";
+	private String pass = "root";
+	private Connection con;
+
+	private PreparedStatement pstmt;
+
+	private int status;
+	private Statement stmt;
+	private ResultSet resultSet;
+	private User u;
+	
+	public UserDAOImpl()
+	{
+		try {
+			
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			con = DriverManager.getConnection(url, nm, pass);
+			
+		} catch (Exception e) {
+
+		e.printStackTrace();
+		}
+	}
+	
+	@Override
+	public void insert(User u) {
+		
+		try {
+			
+			pstmt = con.prepareStatement(INSERT_QUERY);
+			pstmt.setInt(1,u.getUid());
+			pstmt.setString(2, u.getUsername());
+			pstmt.setString(3, u.getEmail());
+			pstmt.setString(4, u.getPassword());
+			pstmt.setInt(5, u.getMobile());
+			
+			pstmt.executeUpdate();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Override
+	public List<User> fetchAll() {
+
+		try {
+			
+			stmt = con.createStatement();
+			resultSet = stmt.executeQuery(FETCH_ALL_QUERY);
+			
+			extractUserListFromResultSet(resultSet);
+			
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return userList;
+		
+	}
+	
+	List<User> extractUserListFromResultSet(ResultSet resultSet)
+	{
+		try {
+			
+			while(resultSet.next())
+			{
+				userList.add(new User(resultSet.getInt("uid"),
+						resultSet.getString("username"),
+						resultSet.getString("email"),
+						resultSet.getString("password"),
+						resultSet.getInt("mobile")));
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return userList;
+	}
+	
+	@Override
+	public User fetchSpecific(int id) {
+
+		try {
+			
+			pstmt = con.prepareStatement(FETCH_SPECIFIC_QUERY);
+			pstmt.setInt(1, id);
+			resultSet = pstmt.executeQuery();
+			
+			userList = extractUserListFromResultSet(resultSet);
+			if(!userList.isEmpty())
+			{
+				u = userList.get(0);
+			}
+			else
+			{
+				System.out.println("No Records");
+				System.exit(0);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return u;
+		
+	}
+
+	@Override
+	public int updateUser(User u) {
+
+		try {
+			
+			pstmt = con.prepareStatement(UPDATE_QUERY);
+			pstmt.setString(1, u.getEmail());
+			pstmt.setInt(2, u.getUid());
+			status = pstmt.executeUpdate();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return status;
+	}
+	
+	@Override
+	public int deleteUser(int id) {
+
+		try {
+			
+			pstmt = con.prepareStatement(DELETE_QUERY);
+			pstmt.setInt(1,id);
+			status = pstmt.executeUpdate();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return status;
+		
+	}
+
+}
+

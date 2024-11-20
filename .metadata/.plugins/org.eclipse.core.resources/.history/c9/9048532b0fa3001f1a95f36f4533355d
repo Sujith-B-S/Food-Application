@@ -1,0 +1,7 @@
+package com.sg.menudao;
+
+public interface MenuDAO {
+	
+	int fetchOnId(int id);
+
+}

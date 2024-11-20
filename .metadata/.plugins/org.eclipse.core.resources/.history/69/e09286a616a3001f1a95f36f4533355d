@@ -1,0 +1,69 @@
+package com.sg.menudaoimpl;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.sg.dbutil.MyConnection;
+import com.sg.menudao.MenuDAO;
+import com.sg.menupojo.Menu;
+
+public class MenuDAOImpl implements MenuDAO{
+	
+	List<Menu> menuList = new ArrayList<Menu>();
+	private Connection con;
+	String fetchOnIdQuery = "select * from `menu` where `menuId` = ?";
+	private PreparedStatement pstmt;
+	private ResultSet resultSet;
+
+	public MenuDAOImpl() {
+
+		con = MyConnection.connect();
+	}
+	
+	@Override
+	public Menu fetchOnId(int id) {
+
+		try {
+			
+			pstmt = con.prepareStatement(fetchOnIdQuery);
+			pstmt.setInt(1, id);
+			resultSet = pstmt.executeQuery();
+			
+			menuList =  extractMenuListFromResultSet(resultSet);
+			
+			
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+		
+		
+		return menuList.get(0);
+	}
+	
+	List<Menu> extractMenuListFromResultSet(ResultSet resultSet)
+	{
+		
+		try {
+			
+			while(resultSet.next())
+			{
+				menuList.add(new Menu(resultSet.getInt("menuId"), resultSet.getInt("restaurantId"), resultSet.getString("name"),
+						resultSet.getString("description"), resultSet.getDouble("price"), resultSet.getDouble("rating"), 
+						resultSet.getBoolean("isAvailable"), resultSet.getString("image")));
+			}
+			
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+		}
+		
+		return menuList;
+		
+	}
+		
+	
+}

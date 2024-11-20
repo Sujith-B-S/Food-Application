@@ -1,0 +1,58 @@
+package com.sg.servlets;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.sg.cartitempojo.CartItem;
+import com.sg.menudaoimpl.MenuDAOImpl;
+import com.sg.menupojo.Menu;
+
+/**
+ * Servlet implementation class AddToCartController
+ */
+@WebServlet("/AddToCartController")
+public class AddToCartController extends HttpServlet {
+
+    private Map<Integer, CartItem> cart;
+
+    @Override
+    protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        PrintWriter pw = resp.getWriter();
+
+        // Initialize cart if null
+        if (cart == null) {
+            this.cart = new HashMap<Integer,CartItem>();
+        }
+
+        // Get and validate parameters
+        String menuIdParam = req.getParameter("menuId");
+        String quantityParam = req.getParameter("quantity");
+
+        if (menuIdParam == null || quantityParam == null) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing required parameters.");
+            return;
+        }
+
+        int menuId = Integer.parseInt(menuIdParam);
+        int quantity = Integer.parseInt(quantityParam);
+
+        // Fetch menu details
+        MenuDAOImpl mdaoi = new MenuDAOImpl();
+        List<Menu> mList = mdaoi.fetchOnId(menuId);
+
+        // Display menu details for debugging
+        for (Menu menu : mList) {
+            pw.println(menu.getMenuId() + " " + menu.getRestaurantId() + " " + menu.getName() + " "
+                    + menu.getPrice() + " " + quantity + " " + menuId);
+        }
+    }
+}

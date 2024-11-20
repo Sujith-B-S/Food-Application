@@ -1,0 +1,7 @@
+package com.sg.restaurantdao;
+
+public interface RestaurantDAO {
+
+	List<Restaurant> fetchAll();
+	
+}

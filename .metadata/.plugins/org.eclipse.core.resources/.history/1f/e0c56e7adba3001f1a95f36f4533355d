@@ -1,0 +1,20 @@
+package com.sg.checkEncry;
+
+import com.sg.userdaoimpl.UserDAOImpl;
+import com.sg.userpojo.User;
+
+public class Main {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		
+		UserDAOImpl udao = new UserDAOImpl();
+		
+		User u = udao.fetchSpecific("pramod@gmail.com");
+		
+		System.out.println(u.getEmail()+"    "+u.getPassword());
+		
+
+	}
+
+}

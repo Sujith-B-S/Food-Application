@@ -1,0 +1,10 @@
+127.0.0.1 - - [12/Nov/2024:22:13:02 +0530] "GET / HTTP/1.1" 404 751
+0:0:0:0:0:0:0:1 - - [12/Nov/2024:22:13:03 +0530] "GET /FoodApplication/login.html HTTP/1.1" 200 306
+0:0:0:0:0:0:0:1 - - [12/Nov/2024:22:13:10 +0530] "GET /FoodApplication/login.html?email=sujith%40gmail.com&pwd=123 HTTP/1.1" 200 306
+127.0.0.1 - - [12/Nov/2024:22:14:35 +0530] "GET / HTTP/1.1" 404 751
+127.0.0.1 - - [12/Nov/2024:22:27:06 +0530] "GET / HTTP/1.1" 404 751
+0:0:0:0:0:0:0:1 - - [12/Nov/2024:22:27:07 +0530] "GET /FoodApplication/login.html HTTP/1.1" 200 325
+127.0.0.1 - - [12/Nov/2024:22:33:29 +0530] "GET / HTTP/1.1" 404 751
+0:0:0:0:0:0:0:1 - - [12/Nov/2024:22:33:29 +0530] "GET /FoodApplication/login.html HTTP/1.1" 200 325
+0:0:0:0:0:0:0:1 - - [12/Nov/2024:22:33:38 +0530] "POST /FoodApplication/login HTTP/1.1" 200 -
+0:0:0:0:0:0:0:1 - - [12/Nov/2024:22:33:38 +0530] "POST /FoodApplication/login HTTP/1.1" 200 21

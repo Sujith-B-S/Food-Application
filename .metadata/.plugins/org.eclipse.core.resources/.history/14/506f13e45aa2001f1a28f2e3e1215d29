@@ -1,0 +1,14 @@
+package com.sg.restaurantpojo;
+
+public class Restaurant {
+	
+	private int restaurantId;
+	private String name;
+	private String cuisineType;
+	private String address;
+	private double ratings;
+	private int deliverTime;
+	private booelan isActive;
+	private String image;
+
+}

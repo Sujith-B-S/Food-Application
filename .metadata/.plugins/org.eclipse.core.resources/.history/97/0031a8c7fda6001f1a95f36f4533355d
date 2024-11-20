@@ -1,0 +1,232 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="com.sg.restaurantpojo.Restaurant" %>
+<%@ page import="java.util.List" %>
+<%@ page import="com.sg.userpojo.User" %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - Food Application</title>
+    <style>
+        /* Google Font */
+        @import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700&display=swap');
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Base styles for responsiveness */
+body {
+    margin: 0;
+    font-family: 'Nunito Sans', sans-serif;
+    background-color: #f9f9f9;
+    overflow-x: hidden; /* Prevent horizontal scroll on small screens */
+}
+
+/* Navbar adjustments */
+.navbar {
+    flex-wrap: wrap; /* Allows wrapping on smaller screens */
+    padding: 10px 20px;
+}
+
+.navbar-left {
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.navbar-left .title {
+    flex-basis: 100%; /* Full width on small screens */
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.navbar nav {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+}
+
+/* Adjust the cart button for smaller screens */
+.cart-button {
+    margin: 10px auto;
+    display: block; /* Center the button on mobile */
+    width: fit-content; /* Adjust to content size */
+    font-size: 16px;
+}
+
+/* Cards container responsive grid */
+.container {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    padding: 10px;
+}
+
+/* Card adjustments */
+.card {
+    height: auto; /* Adjust height automatically for responsive content */
+}
+
+.card img {
+    height: 200px; /* Slightly smaller for mobile */
+}
+
+/* Content inside the card */
+.card-content {
+    padding: 10px;
+}
+
+.card-content h3 {
+    font-size: 1.2rem; /* Slightly smaller headers */
+}
+
+.card-content p {
+    font-size: 0.85rem;
+}
+
+/* Responsive styles for different breakpoints */
+@media (max-width: 768px) {
+    .navbar {
+        padding: 10px;
+        height: auto; /* Adjust navbar height */
+    }
+
+    .app-name {
+        font-size: 22px;
+    }
+
+    .navbar nav a {
+        font-size: 16px;
+    }
+
+    .user-info p, .user-info a {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .app-name {
+        font-size: 20px;
+    }
+
+    .hamburger {
+        display: flex; /* Display hamburger menu */
+    }
+
+    .navbar nav {
+        display: none; /* Hide the nav links */
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .navbar nav.active {
+        display: flex; /* Show on toggle */
+        background-color: #FF734C;
+    }
+
+    .user-info a {
+        font-size: 12px;
+        padding: 6px 10px;
+    }
+
+    .card-content h3 {
+        font-size: 1rem;
+    }
+
+    .card-content p {
+        font-size: 0.75rem;
+    }
+}
+
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const hamburger = document.querySelector('.hamburger');
+            const nav = document.querySelector('.navbar nav');
+
+            hamburger.addEventListener('click', () => {
+                nav.classList.toggle('active');
+            });
+        });
+    </script>
+</head>
+<body>
+
+	
+    <!-- Navbar -->
+    <div class="navbar">
+        <div class="navbar-left">
+            <div class = "title">
+            	<p class="app-name">Food World</p>
+            </div>
+            <div class="hamburger">
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+            <nav>
+                <a href="home.jsp">Home</a>
+                <a href="restaurants.jsp">Restaurants</a>
+                <a href="contact.jsp">Contact Us</a>
+                <a href="about.jsp">About</a>
+            </nav>
+        </div>
+        <a href = "cart.jsp" class = "cart-button"> Go to Cart</a>
+        <div class="user-info">
+            <% 
+                User user = (User) session.getAttribute("loggedInUser"); 
+                if (user != null) { 
+            %>
+                <p>Welcome, <%= user.getUsername() %></p>
+                <a href="login.jsp">Logout</a>
+            <% 
+                } else { 
+            %>
+                <a href="login.jsp">Login</a>
+                <a href="register.jsp">Register</a>
+            <% 
+                } 
+            %>
+        </div>
+    </div>
+    
+    
+	
+    <!-- Restaurant Cards -->
+    <div class="container">
+        <% 
+            List<Restaurant> resList = (List<Restaurant>) session.getAttribute("resList");
+            if (resList != null) {
+                for (Restaurant res : resList) {
+        %>
+        <a href="ShowMenu?restaurantId=<%= res.getRestaurantId() %>">
+        <div class="card">
+            <img src="<%= res.getImage() %>" alt="Restaurant">
+            <div class="card-content">
+                <h3><%= res.getName() %></h3>
+                <p><strong>Cuisine:</strong> <%= res.getCuisineType() %></p>
+                <p><strong>Address:</strong> <%= res.getAddress() %></p>
+                <p><strong>Ratings:</strong> <%= res.getRatings() %></p>
+                <p><strong>Delivery Time:</strong> <%= res.getDeliverTime() %> mins</p>
+                <p><strong>Available:</strong> <%= res.getIsActive() ? "Yes" : "No" %></p>
+                
+                   
+                
+            </div>
+        </div>
+         </a>
+        <% 
+                }
+            } else { 
+        %>
+        <p>No restaurants available at the moment. Please check back later.</p>
+        <% 
+            } 
+        %>
+        
+    </div>
+    
+   
+</body>
+</html>

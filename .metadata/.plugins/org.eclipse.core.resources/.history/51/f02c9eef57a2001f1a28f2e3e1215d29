@@ -1,0 +1,9 @@
+package com.sg.restaurantdaoimpl;
+
+import com.sg.restaurantdao.RestaurantDAO;
+
+public class RestaurantDAOImpl implements RestaurantDAO{
+	
+	List<Restaurant> fetchAll();
+
+}

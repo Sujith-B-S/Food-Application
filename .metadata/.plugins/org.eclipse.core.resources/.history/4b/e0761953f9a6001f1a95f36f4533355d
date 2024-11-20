@@ -1,0 +1,49 @@
+package com.sg.servlets;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Map;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.sg.cartdaoimpl.CartDAOImpl;
+import com.sg.cartitempojo.CartItem;
+
+/**
+ * Servlet implementation class UpdateCartItem
+ */
+@WebServlet("/UpdateCartItem")
+public class UpdateCartItem extends HttpServlet {
+
+    @Override
+    protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        // Retrieve the cart from the session
+        Map<Integer, CartItem> cart = (Map<Integer, CartItem>) req.getSession().getAttribute("cart");
+        if (cart == null) {
+            resp.sendRedirect("cart.jsp?error=Cart is empty.");
+            return;
+        }
+
+        try {
+            // Get and validate parameters
+            int cartItemId = Integer.parseInt(req.getParameter("cartItemId"));
+            int quantity = Integer.parseInt(req.getParameter("quantity"));
+
+            // Update the item in the cart
+            CartDAOImpl cartDao = new CartDAOImpl();
+            cart = cartDao.updateItem(cart, cartItemId, quantity);
+
+            // Persist the updated cart to the session
+            req.getSession().setAttribute("cart", cart);
+
+            // Redirect to the cart page
+            resp.sendRedirect("cart.jsp");
+        } catch (NumberFormatException e) {
+            resp.sendRedirect("cart.jsp?error=Invalid input.");
+        }
+    }
+}

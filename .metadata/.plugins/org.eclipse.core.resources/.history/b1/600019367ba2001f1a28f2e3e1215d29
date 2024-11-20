@@ -1,0 +1,35 @@
+package com.sg.servlets;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.sg.restaurantdaoimpl.RestaurantDAOImpl;
+import com.sg.restaurantpojo.Restaurant;
+
+/**
+ * Servlet implementation class GetRestaurant
+ */
+@WebServlet("/GetRestaurant")
+public class GetRestaurant extends HttpServlet {
+	PrintWriter pw;
+	List<Restaurant> resList = new ArrayList<Restaurant>();
+	
+	@Override
+	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+			
+		RestaurantDAOImpl rdaoimpl = new RestaurantDAOImpl();
+		rdaoimpl.fetchAll();
+		
+		req.getSession().setAttribute("resList", resList);
+		resp.sendRedirect("home.jsp");
+	}
+
+}

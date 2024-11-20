@@ -1,0 +1,29 @@
+package com.sg.servlets;
+
+import java.io.IOException;
+import java.sql.Connection;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.sg.dbutil.MyConnection;
+
+@WebServlet("/register")
+public class Register extends HttpServlet{
+	@Override
+	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		
+		String name = req.getParameter("name");
+		String email = req.getParameter("email");
+		String password = req.getParameter("password");
+		String cPassword = req.getParameter("cpassword");
+		String mobile = req.getParameter("mobile");
+		String address = req.getParameter("address");
+		
+		
+	}
+
+}

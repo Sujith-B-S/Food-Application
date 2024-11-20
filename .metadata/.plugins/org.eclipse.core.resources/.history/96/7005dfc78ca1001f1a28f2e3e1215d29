@@ -1,0 +1,14 @@
+package com.sg.userdao;
+
+import java.util.List;
+
+import com.sg.userpojo.User;
+
+public interface UserDAO {
+	
+	void insert(User u);
+	List<User> fetchAll();
+	User fetchSpecific(String email);
+	int update(User u);
+	int delete(int uid);
+}

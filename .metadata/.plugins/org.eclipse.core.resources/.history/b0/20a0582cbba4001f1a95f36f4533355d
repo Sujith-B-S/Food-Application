@@ -1,0 +1,60 @@
+package com.sg.cartdaoimpl;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import com.sg.cartitempojo.CartItem;
+
+public class CartDAOImpl {
+	
+	private Map<Integer,CartItem> items;
+	
+	public CartDAOImpl() {
+		
+		this.items = new HashMap<Integer,CartItem>();
+	}
+	
+	public Map<Integer,CartItem> addItem(CartItem ci)
+	{
+		
+		int itemId = ci.getItemId();
+		if(items.containsKey(itemId))
+		{
+			CartItem existingItem = items.get(itemId);
+			existingItem.setQuantity(existingItem.getQuantity()+ci.getQuantity());
+		}
+		else
+		{
+			items.put(itemId, ci);
+		}
+		
+		
+		return items;
+	}
+	
+	public void updateItem(int itemId , int quantity)
+	{
+		if(items.containsKey(itemId))
+		{
+			if(quantity <= 0)
+			{
+				items.remove(itemId);
+			}
+			else
+			{
+				items.get(itemId).setQuantity(quantity);
+			}
+		}
+	}
+	
+	public void removeItem(int itemId)
+	{
+		items.remove(itemId);
+	}
+	
+	public Map<Integer , CartItem> getItems()
+	{
+		return items;
+	}
+
+}

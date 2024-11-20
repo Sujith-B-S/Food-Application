@@ -1,0 +1,9 @@
+INDEX VERSION 1.4+C:\Users\Admin\eclipse-workspace-main-food-project\.metadata\.plugins\org.eclipse.wst.jsdt.core\indexes
+1665919186.index
+2416803863.index
+1740396387.index
+60262155.index
+4196368207.index
+2886589831.index
+3429333232.index
+1665919186.index

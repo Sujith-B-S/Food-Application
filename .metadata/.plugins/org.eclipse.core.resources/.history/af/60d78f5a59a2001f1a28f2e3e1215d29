@@ -1,0 +1,29 @@
+package com.sg.restaurantdaoimpl;
+
+import java.util.List;
+
+import com.sg.restaurantdao.RestaurantDAO;
+import com.sg.restaurantpojo.Restaurant;
+
+public class RestaurantDAOImpl implements RestaurantDAO{
+
+	public RestaurantDAOImpl() {
+		
+		try {
+			
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Override
+	public List<Restaurant> fetchAll() {
+		
+		
+		return null;
+	}
+	
+	
+
+}

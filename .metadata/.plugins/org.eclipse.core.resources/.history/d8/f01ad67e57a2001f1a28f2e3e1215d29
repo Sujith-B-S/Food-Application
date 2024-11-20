@@ -1,0 +1,5 @@
+package com.sg.restaurantdaoimpl;
+
+public class RestaurantDAOImpl {
+
+}

@@ -1,0 +1,9 @@
+package com.sg.menudaoimpl;
+
+import com.sg.menudao.MenuDAO;
+
+public class MenuDAOImpl implements MenuDAO{
+	
+		
+
+}

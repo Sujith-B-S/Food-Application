@@ -1,0 +1,49 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+    <%@ page import = "com.sg.menupojo.Menu" %>
+    <%@ page import = "java.util.*" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Menu</title>
+</head>
+<body>
+<table>
+<tr>
+<th>Menu ID </th>
+<th>Res ID </th>
+<th>Name </th>
+<th>Description </th>
+<th>Price </th>
+<th>Ratings </th>
+<th>Is Available  </th>
+</tr>
+<%
+List<Menu> menuList = (List<Menu>)request.getAttribute("menu");
+
+for(Menu menu : menuList)
+{
+	%>
+	
+	<tr>
+	<th><%= menu.getMenuId() %></th>
+	<th><%= menu.getRestaurantId() %></th>
+	<th><%= menu.getName() %></th>
+	<th><%= menu.getDescription() %></th>
+	<th><%= menu.getPrice() %></th>
+	<th><%= menu.getRating() %></th>
+	<th><%= menu.isAvailable() ? "Yes" : "No" %></th>
+	
+	</tr>
+	
+	
+	
+	
+	
+<% 	
+}
+%>
+</table>
+</body>
+</html>

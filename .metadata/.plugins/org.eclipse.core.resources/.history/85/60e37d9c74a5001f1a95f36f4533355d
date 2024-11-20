@@ -1,0 +1,160 @@
+<%@ page import="com.sg.menupojo.Menu" %>
+<%@ page import="java.util.*" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <title>Menu Details</title>
+    <style>
+        h1 {
+            text-align: center;
+        }
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .card {
+            width: 23%;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            overflow: hidden;
+            background-color: #f5f5f5;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            margin-bottom: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .card img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+
+        .card-content {
+            padding: 15px;
+        }
+
+        .card-content h3 {
+            margin: 10px 0;
+            font-size: 1.2em;
+        }
+
+        .card-content p {
+            margin: 5px 0;
+            font-size: 0.9em;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+            cursor: pointer;
+        }
+
+        select {
+            width: 80%;
+            padding: 5px;
+            margin: 10px 0;
+            font-size: 14px;
+        }
+
+        button {
+            padding: 10px 15px;
+            background-color: #FF734C;
+            border: none;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #ff3d00;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .card {
+                width: 45%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .card {
+                width: 100%;
+            }
+        }
+    </style>
+    <script>
+    function addToCart(menuId, quantity) {
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", "AddToCartController", true);
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+        xhr.onload = function () {
+            if (xhr.status === 200) {
+                const response = JSON.parse(xhr.responseText);
+                if (response.status === "success") {
+                    alert("Item added to cart successfully!");
+                } else {
+                    alert("Failed to add item to cart.");
+                }
+            } else {
+                alert("Error while adding to cart.");
+            }
+        };
+
+        xhr.send(`menuId=${menuId}&quantity=${quantity}`);
+    }
+</script>
+</head>
+<body>
+    <h1>Menu Item Details</h1>
+    <div class="container">
+        <% 
+            // Get the menu list from the request
+            List<Menu> menuList = (List<Menu>) request.getAttribute("menu");
+            
+            // Check if the menu list is not null and not empty
+            if (menuList != null && !menuList.isEmpty()) { 
+                // Loop through the menu list and display each item
+                for (Menu menu : menuList) {
+        %>
+        <div class="card">
+            <div class="card-content">
+                <img alt="Menu Items" src="<%= menu.getImage() %>">
+                <h3><%= menu.getName() %></h3>
+                <p><strong>Description:</strong> <%= menu.getDescription() %></p>
+                <p><strong>Price:</strong> ₹<%= menu.getPrice() %></p>
+                <p><strong>Rating:</strong> <%= menu.getRating() %>/5</p>
+                <p><strong>Available:</strong> <%= menu.isAvailable() ? "Yes" : "No" %></p>
+                <form action="AddToCartController" method="GET">
+                    <input type="hidden" name="menuId" value="<%= menu.getMenuId() %>">
+                    <label for="quantity-<%= menu.getMenuId() %>">Quantity:</label>
+                    <select id="quantity-<%= menu.getMenuId() %>" name="quantity">
+                        <% for (int i = 1; i <= 10; i++) { %>
+                            <option value="<%= i %>"><%= i %></option>
+                        <% } %>
+                    </select>
+                    <button type="submit">Add to Cart</button>
+                </form>
+            </div>
+        </div>
+            <!-- Example button inside a menu item card -->
+<button onclick="addToCart(<%= menu.getMenuId() %>, 1)">Add to Cart</button>
+         
+        <% 
+                } // End of for loop
+            } else { // If no menu items are available
+        %>
+        <p>No menu details found for this restaurant.</p>
+        <% } %>
+        
+        
+    </div>
+</body>
+</html>

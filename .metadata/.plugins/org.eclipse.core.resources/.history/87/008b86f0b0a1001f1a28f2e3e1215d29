@@ -1,0 +1,46 @@
+package com.sg.servlets;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.sg.userdao.UserDAO;
+import com.sg.userdaoimpl.UserDAOImpl;
+import com.sg.userpojo.User;
+
+@WebServlet("/register")
+public class Register extends HttpServlet{
+	@Override
+	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		
+		
+		PrintWriter pw;
+		pw = resp.getWriter();
+		String name = req.getParameter("name");
+		String email = req.getParameter("email");
+		String password = req.getParameter("password");
+		String cPassword = req.getParameter("cpassword");
+		String mobile = req.getParameter("mobile");
+		String address = req.getParameter("address");
+		
+		UserDAO udao = new UserDAOImpl();
+		User u = new User(name,email,password,mobile,address);
+		int status = udao.insert(u);
+		if(status != 0)
+		{
+			
+			pw.println("Registered Succesfully");
+			//resp.sendRedirect("login.jsp");
+		}
+		else
+		{
+			pw.println("Already Registered");
+		}
+	}
+
+}

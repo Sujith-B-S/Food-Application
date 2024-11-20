@@ -1,0 +1,73 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="com.sg.restaurantpojo.Restaurant" %>
+<%@ page import="java.util.List" %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home - Food Application</title>
+    <style>
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+        .card {
+            width: 23%; /* Approximately 4 cards per row */
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .card img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+        .card-content {
+            padding: 15px;
+        }
+        .card-content h3 {
+            margin: 10px 0;
+            font-size: 1.2em;
+        }
+        .card-content p {
+            margin: 5px 0;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <%
+            List<Restaurant> resList = (List<Restaurant>) session.getAttribute("resList");
+            if (resList != null) {
+                for (Restaurant res : resList) {
+        %>
+        <div class="card">
+            <!-- Display the restaurant image if available -->
+            <%-- <img src="data:image/jpeg;base64,<%= new String(java.util.Base64.getEncoder().encode(res.getImage())) %>" alt="Restaurant Image"> --%>
+            
+            <div class="card-content">
+                <h3><%= res.getName() %></h3>
+                <p><strong>Cuisine:</strong> <%= res.getCuisineType() %></p>
+                <p><strong>Address:</strong> <%= res.getAddress() %></p>
+                <p><strong>Ratings:</strong> <%= res.getRatings() %></p>
+                <p><strong>Delivery Time:</strong> <%= res.getDeliverTime() %> mins</p>
+                <p><strong>Available:</strong> <%= res.getIsActive() ? "Yes" : "No" %></p>
+            </div>
+        </div>
+        <%
+                }
+            } else {
+        %>
+        <p>No restaurants available.</p>
+        <%
+            }
+        %>
+    </div>
+</body>
+</html>

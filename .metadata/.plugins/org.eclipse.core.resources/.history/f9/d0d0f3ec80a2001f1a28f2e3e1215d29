@@ -1,0 +1,46 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="com.sg.restaurantpojo.Restaurant" %>
+<%@ page import = "java.util.List" %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home - Food Application</title>
+    
+ </head>
+<body>
+    <table border="1">
+        <tr>
+            <th>Restaurant Id</th>
+            <th>Restaurant Name</th>
+            <th>Cuisine Type</th>
+            <th>Address</th>
+            <th>Ratings</th>
+            <th>Deliver Time (mins)</th>
+            <th>Is Available</th>
+        </tr>
+        <%
+            List<Restaurant> resList = (List<Restaurant>) session.getAttribute("resList");
+            if (resList != null) {
+                for (Restaurant res : resList) {
+        %>
+        <tr>
+            <td><%= res.getRestaurantId() %></td>
+            <td><%= res.getName() %></td>
+            <td><%= res.getCuisineType() %></td>
+            <td><%= res.getAddress() %></td>
+            <td><%= res.getRatings() %></td>
+            <td><%= res.getDeliverTime() %></td>
+            <td><%= res.getIsActive() ? "Yes" : "No" %></td>
+        </tr>
+        <%
+                }
+            } else {
+        %>
+        <tr><td colspan="7">No restaurants available.</td></tr>
+        <%
+            }
+        %>
+    </table>
+</body>
+</html>

@@ -1,0 +1,32 @@
+package com.sg.menudaoimpl;
+
+import java.sql.Connection;
+
+import com.sg.dbutil.MyConnection;
+import com.sg.menudao.MenuDAO;
+
+public class MenuDAOImpl implements MenuDAO{
+	
+		private Connection con;
+		String fetchOnIdQuery = "select * from `menu` where `menuId` = ?";
+
+		public MenuDAOImpl() {
+
+			con = MyConnection.connect();
+		}
+		
+		@Override
+		public int fetchOnId(int id) {
+
+			try {
+				
+			} catch (Exception e) {
+
+				e.printStackTrace();
+			}
+			
+			
+			return 0;
+		}
+
+}

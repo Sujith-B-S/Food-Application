@@ -1,0 +1,36 @@
+<%@ page import="com.sg.menupojo.Menu" %>
+<%@ page import="java.util.*" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <title>Menu Details</title>
+</head>
+<body>
+    <h1>Menu Item Details</h1>
+    
+    <% 
+        // Get the menu object from the request
+        List<Menu> menuList = (List<Menu>) request.getAttribute("menu");
+        
+        // Check if the menu object is not null
+        if (!menuList.isEmpty()) { 
+        	for(Menu menu : menuList)
+        	{
+    %>
+        <h2>Name: <%= menu.getName() %></h2>
+        <p>Description: <%= menu.getDescription() %></p>
+        <p>Price: ₹<%= menu.getPrice() %></p>
+        <p>Rating: <%= menu.getRating() %></p>
+        <p>Available: <%= menu.isAvailable() ? "Yes" : "No" %></p>
+        
+        <% 
+        	}%>
+        	
+        <% } %>
+    <% 
+        } else {
+    %>
+        <p>No menu details found.</p>
+    <% } %>
+</body>
+</html>
