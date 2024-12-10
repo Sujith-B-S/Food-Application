@@ -1,0 +1,3 @@
+0:0:0:0:0:0:0:1 - - [09/Dec/2024:00:07:03 +0530] "GET /FoodApplication/about.jsp HTTP/1.1" 404 739
+0:0:0:0:0:0:0:1 - - [09/Dec/2024:00:08:04 +0530] "GET /SpringMVCApp/download.jfif HTTP/1.1" 404 781
+0:0:0:0:0:0:0:1 - - [09/Dec/2024:00:08:05 +0530] "GET /SpringMVCApp/download.jfif HTTP/1.1" 404 781

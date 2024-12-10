@@ -1,0 +1,87 @@
+package com.sg.servlets;
+		
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Map;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.sg.cartitempojo.CartItem;
+import com.sg.oderhistorypojo.OrderHistory;
+import com.sg.orderhistorydaoimpl.OrderHistoryDAOImpl;
+import com.sg.orderitemdaoimpl.OrderItemDAOImpl;
+import com.sg.orderitempojo.OrderItem;
+import com.sg.ordersdaoimpl.OrdersDAOImpl;
+import com.sg.orderspojo.Orders;
+import com.sg.userpojo.User;
+		
+/**		
+ * Servlet implementation class SaveOrders
+ */		
+@WebServlet("/SaveOrders")
+public class SaveOrders extends HttpServlet {
+		
+		
+	private int userId;
+
+	@Override
+    protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		
+	
+		PrintWriter pw = resp.getWriter();
+		User u = (User) req.getSession().getAttribute("loggedInUser");
+		
+		if (u != null) {
+		     userId = u.getUid(); 
+		    
+
+		}
+		else 
+		{
+			resp.sendRedirect("invalidUser.jsp");
+		}
+		
+		Map<Integer, CartItem> cart = (Map<Integer, CartItem>) req.getSession().getAttribute("cart");
+		OrdersDAOImpl odaoi = new OrdersDAOImpl();
+		Orders o = new Orders();
+		
+		for(CartItem c : cart.values())
+		{
+		
+			o.setUserId(userId);
+			o.setRestuarantId(c.getRestaurantId());
+			o.setMenuId(c.getItemId());
+			o.setQuantity(c.getQuantity());
+			o.setTotal(c.getQuantity()*c.getPrice());
+			o.setPayment("UPI");
+			o.setStatus("Delivered");
+			
+			odaoi.inserData(o);
+			
+		}
+		
+		 o = odaoi.getMaxOrderId();
+		
+		OrderItemDAOImpl oidaoi = new OrderItemDAOImpl();
+		
+		OrderItem oi = new OrderItem(o.getOrderId(),o.getMenuId(),o.getQuantity(),o.getTotal());
+		
+		oidaoi.insertData(oi);
+		
+		OrderHistoryDAOImpl ohdaoi = new OrderHistoryDAOImpl();
+		
+		OrderHistory oh = new OrderHistory(o.getOrderId(),o.getUserId(),o.getRestuarantId(),o.getTotal(),o.getStatus());
+		
+		ohdaoi.insertData(oh);
+		
+		
+		
+	}	
+}		
+		
+		
+		

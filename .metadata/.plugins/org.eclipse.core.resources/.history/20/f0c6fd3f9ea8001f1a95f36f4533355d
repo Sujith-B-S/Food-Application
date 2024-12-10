@@ -1,0 +1,25 @@
+package com.sg.ordersdaoimpl;
+
+import java.sql.Connection;
+
+import com.sg.dbutil.MyConnection;
+import com.sg.orderspojo.Orders;
+
+public class OrdersDAOImpl {
+
+	
+	String insertQuery = "insert into `orders`(`userId`,`restaurantId`,`menuId`,`quantity`,`total`,`payment`,`status`) values (?,?,?,?,?,?,?)";
+	private Connection con;
+
+	public OrdersDAOImpl() {
+
+		con =MyConnection.connect();
+	}
+	
+	public int inserData(Orders o)
+	{
+		
+		
+		return 0;
+	}
+}

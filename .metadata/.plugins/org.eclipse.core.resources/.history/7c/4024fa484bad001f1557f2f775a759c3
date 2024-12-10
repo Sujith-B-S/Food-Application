@@ -1,0 +1,45 @@
+package com.sg.ordersdaoimpl;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+
+import com.sg.dbutil.MyConnection;
+import com.sg.orderspojo.Orders;
+
+public class OrdersDAOImpl {
+
+	
+	String insertQuery = "insert into `orders`(`userId`,`restaurantId`,`menuId`,`quantity`,`total`,`payment`,`status`) values (?,?,?,?,?,?,?)";
+	private Connection con;
+	private PreparedStatement pstmt;
+	private int status;
+
+	public OrdersDAOImpl() {
+
+		con =MyConnection.connect();
+	}
+	
+	public int inserData(Orders o)
+	{
+		
+		try {
+			pstmt = con.prepareStatement(insertQuery);
+			pstmt.setInt(1, o.getUserId());
+			pstmt.setInt(2, o.getRestuarantId());
+			pstmt.setInt(3, o.getMenuId());
+			pstmt.setInt(4, o.getQuantity());
+			pstmt.setDouble(5, o.getTotal());
+			pstmt.setString(6, o.getPayment());
+			pstmt.setString(7, o.getStatus());
+			
+			status = pstmt.executeUpdate();
+			
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+		
+		
+		return status;
+	}
+}

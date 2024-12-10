@@ -1,0 +1,5 @@
+package com.sg.orderhistorydaoimpl;
+
+public class OrderHistoryDAOImpl {
+
+}

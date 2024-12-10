@@ -1,0 +1,66 @@
+<body>
+    <!-- Navbar -->
+    <div class="navbar">
+        <div class="navbar-left">
+            <div class="title">
+                <p class="app-name">Food World</p>
+            </div>
+            <div class="hamburger">
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+            <nav>
+                <a href="home.jsp">Home</a>
+                <a href="restaurants.jsp">Restaurants</a>
+                <a href="contact.jsp">Contact Us</a>
+                <a href="about.jsp">About</a>
+            </nav>
+        </div>
+        <div class="user-info">
+            <% 
+                User user = (User) session.getAttribute("loggedInUser"); 
+                if (user != null) { 
+            %>
+                <p>Welcome, <%= user.getUsername() %></p>
+                <a href="login.jsp">Logout</a>
+            <% 
+                } else { 
+            %>
+                <a href="login.jsp">Login</a>
+                <a href="register.jsp">Register</a>
+            <% 
+                } 
+            %>
+        </div>
+    </div>
+
+    <!-- Buttons Below Navbar -->
+    <div class="button-bar">
+        <a href="cart.jsp" class="cart-button">Go to Cart</a>
+        <a href="ShowOrderHistory" class="cart-button">OrderHistory</a>
+    </div>
+
+    <!-- Restaurant Cards -->
+    <div class="container">
+        <% 
+            List<Restaurant> resList = (List<Restaurant>) session.getAttribute("resList");
+            if (resList != null) {
+                for (Restaurant res : resList) {
+        %>
+        <a href="ShowMenu?restaurantId=<%= res.getRestaurantId() %>">
+        <div class="card">
+            <img src="<%= res.getImage() %>" alt="Restaurant">
+            <div class="card-content">
+                <h3><%= res.getName() %></h3>
+                <p><strong>Cuisine:</strong> <%= res.getCuisineType() %></p>
+                <p><strong>Location:</strong> <%= res.getAddress() %></p>
+            </div>
+        </div>
+        </a>
+        <% 
+            } 
+        } 
+        %>
+    </div>
+</body>

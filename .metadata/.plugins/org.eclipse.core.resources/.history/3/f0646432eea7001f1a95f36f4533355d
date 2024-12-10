@@ -1,0 +1,262 @@
+<%@ page import="com.sg.menupojo.Menu" %>
+<%@ page import="java.util.*" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <title>Menu Details</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+
+        /* Navbar styles */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 60px;
+            background-color: #FF734C;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        .navbar .app-name {
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .navbar nav {
+            display: flex;
+            gap: 20px;
+        }
+
+        .navbar nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        .navbar nav a:hover {
+            color: #000;
+        }
+
+        .cart-button {
+            background: linear-gradient(90deg, #ff7e5f, #feb47b);
+            color: white;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .cart-button:hover {
+            background: linear-gradient(90deg, #feb47b, #ff7e5f);
+        }
+
+        /* Container and card styles */
+        .container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.card {
+    width: 250px; /* Fixed width for all cards */
+    height: 400px; /* Fixed height for all cards */
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: #f5f5f5;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    margin-bottom: 20px;
+    transition: transform 0.3s ease;
+}
+
+.card img {
+    width: 100%;
+    height: 200px; /* Consistent image height */
+    object-fit: cover;
+    border-radius: 8px 8px 0 0; /* Matches card border radius */
+}
+
+.card-content {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Adjust content spacing */
+    height: calc(100% - 200px); /* Ensures content fits within the fixed height */
+}
+
+.card-content h3 {
+    font-size: 1.1em;
+    margin: 10px 0;
+    font-weight: bold;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.card-content p {
+    margin: 5px 0;
+    font-size: 0.9em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.card:hover {
+    transform: scale(1.05);
+    cursor: pointer;
+}
+        
+        .container {
+            margin-top: 80px;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .card-content {
+            padding: 15px;
+        }
+
+        .card-content h3 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .card-content p {
+            font-size: 14px;
+            margin: 5px 0;
+        }
+
+        .card-content select {
+            margin-top: 10px;
+            padding: 5px;
+            font-size: 14px;
+        }
+
+        .card-content button {
+            margin-top: 10px;
+            background-color: #FF734C;
+            color: white;
+            border: none;
+            padding: 10px;
+            font-size: 14px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .card-content button:hover {
+            background-color: #ff3d00;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .card {
+                width: 100%;
+            }
+        }
+    </style>
+    <script>
+        // Function to handle adding an item to the cart using AJAX
+        function addToCart(menuId) {
+            const quantity = document.getElementById("quantity-" + menuId).value;
+
+            // Perform AJAX request
+            $.ajax({
+                url: 'AddToCartController',
+                method: 'POST',
+                data: { menuId: menuId, quantity: quantity },
+                success: function(response) {
+                    alert("Item added to cart successfully!"); // Notify success
+                },
+                error: function(xhr) {
+                    alert("Error: " + xhr.responseJSON.message); // Notify error
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <div class="navbar">
+        <div class="app-name">Menu Item Details</div>
+        <nav>
+            <a href="home.jsp">Home</a>
+            <a href="restaurants.jsp">Restaurants</a>
+            <a href="contact.jsp">Contact Us</a>
+            <a href="about.jsp">About</a>
+        </nav>
+        <a href="cart.jsp" class="cart-button">Go to Cart</a>
+    </div>
+
+    <!-- Menu Items -->
+    <div class="container">
+        <% 
+            // Get the menu list from the request
+            List<Menu> menuList = (List<Menu>) request.getAttribute("menu");
+
+            if (menuList != null && !menuList.isEmpty()) {
+                for (Menu menu : menuList) { 
+        %>
+        <div class="card">
+            <img src="<%= menu.getImage() %>" alt="Menu Item">
+            <div class="card-content">
+                <h3><%= menu.getName() %></h3>
+                <p><strong>Description:</strong> <%= menu.getDescription() %></p>
+                <p><strong>Price:</strong> ₹<%= menu.getPrice() %></p>
+                <p><strong>Rating:</strong> <%= menu.getRating() %>/5</p>
+                <p><strong>Available:</strong> <%= menu.isAvailable() ? "Yes" : "No" %></p>
+                <label for="quantity-<%= menu.getMenuId() %>">Quantity:</label>
+                <select id="quantity-<%= menu.getMenuId() %>" name="quantity">
+                    <% for (int i = 1; i <= 10; i++) { %>
+                        <option value="<%= i %>"><%= i %></option>
+                    <% } %>
+                </select>
+                <button type="button" onclick="addToCart(<%= menu.getMenuId() %>)">Add to Cart</button>
+            </div>
+        </div>
+        <% 
+                } // End for loop
+            } else { 
+        %>
+        <p style="text-align: center; font-size: 18px;">No menu details found for this restaurant.</p>
+        <% } %>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,20 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page import="java.util.*"%>
+<%@ page import="com.sg.oderhistorypojo.OrderHistory" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Order History</title>
+</head>
+<body>
+
+<h1>Oder History Page</h1>
+
+<%
+	ArrayList<OrderHistory> ohList = (ArrayList<OrderHistory>)request.getSession().getAttribute("ohList");
+%>
+
+</body>
+</html>

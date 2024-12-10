@@ -1,0 +1,16 @@
+package com.sg.orderspojo;
+
+import java.time.LocalDateTime;
+
+public class Orders {
+
+	private int orderId;
+	private int userId;
+	private int restuarantId;
+	private int menuId;
+	private int quantity;
+	private double total;
+	private String payment;
+	private LocalDateTime dateTime;
+	private String status;
+}

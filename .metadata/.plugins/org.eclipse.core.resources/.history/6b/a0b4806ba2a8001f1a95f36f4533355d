@@ -1,0 +1,55 @@
+package com.sg.servlets;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.sg.userpojo.User;
+
+/**
+ * Servlet implementation class SaveOrders
+ */
+@WebServlet("/SaveOrders")
+public class SaveOrders extends HttpServlet {
+	
+	
+	@Override
+    protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        resp.setContentType("text/html;charset=UTF-8");
+        PrintWriter pw = resp.getWriter();
+
+        try {
+            // Retrieve logged-in user from session
+            User u = (User) req.getSession().getAttribute("loggedInUser");
+            if (u == null) {
+                pw.println("<h3>Please log in to place an order.</h3>");
+                return;
+            }
+
+            // Retrieve order details from request
+            int menuId = Integer.parseInt(req.getParameter("menuId"));
+            int restaurantId = Integer.parseInt(req.getParameter("restaurantId"));
+            int quantity = Integer.parseInt(req.getParameter("quantity"));
+            double total = Double.parseDouble(req.getParameter("total"));
+            String payment = req.getParameter("payment");
+            String status = req.getParameter("status");
+
+            // Save the order to the database
+            boolean success = saveOrder(u.getUserId(), restaurantId, menuId, quantity, total, payment, status);
+
+            if (success) {
+                pw.println("<h3>Order placed successfully!</h3>");
+            } else {
+                pw.println("<h3>Failed to place the order.</h3>");
+            }
+        } catch (Exception e) {
+            pw.println("<h3>Error: " + e.getMessage() + "</h3>");
+        }
+    }
+
+}

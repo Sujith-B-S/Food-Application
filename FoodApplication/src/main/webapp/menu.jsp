@@ -6,8 +6,39 @@
     <title>Menu Details</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+
         h1 {
             text-align: center;
+            margin-top: 20px;
+            color: #333;
+        }
+
+        .navbar {
+            background-color: #ff6347;
+            padding: 20px; /* Increased padding for a bigger navbar */
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .navbar a {
+            color: white;
+            margin: 0 25px; /* Increased margin for spacing */
+            text-decoration: none;
+            font-weight: bold;
+            padding: 15px 20px; /* Increased padding for larger buttons */
+            border-radius: 5px;
+            font-size: 1.1em; /* Increased font size */
+            transition: background-color 0.3s;
+        }
+
+        .navbar a:hover {
+            background-color: #ff3d00;
         }
 
         .container {
@@ -16,24 +47,26 @@
             gap: 20px;
             justify-content: center;
             margin-top: 20px;
+            padding: 0 20px;
         }
 
         .card {
             width: 23%;
-            border: 1px solid #ccc;
-            border-radius: 8px;
+            border: none;
+            border-radius: 10px;
             overflow: hidden;
-            background-color: #f5f5f5;
+            background-color: #fff;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             text-align: center;
             margin-bottom: 20px;
             transition: transform 0.3s ease;
+            position: relative;
         }
 
         .card img {
             width: 100%;
-            height: 250px;
-            border-radius:20px;
+            height: 200px;
+            border-radius: 10px 10px 0 0;
             object-fit: cover;
         }
 
@@ -43,12 +76,14 @@
 
         .card-content h3 {
             margin: 10px 0;
-            font-size: 1.2em;
+            font-size: 1.5em;
+            color: #333;
         }
 
         .card-content p {
             margin: 5px 0;
             font-size: 0.9em;
+            color: #666;
         }
 
         .card:hover {
@@ -57,10 +92,12 @@
         }
 
         select {
-            width: 20%;
+            width: 50%;
             padding: 5px;
             margin: 10px 0;
             font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
         }
 
         button {
@@ -72,6 +109,7 @@
             cursor: pointer;
             font-size: 16px;
             margin-top: 10px;
+            transition: background-color 0.3s;
         }
 
         button:hover {
@@ -89,33 +127,13 @@
             .card {
                 width: 100%;
             }
-            
-            .cart-button {
-    display: inline-block;
-    margin-right: 30px;
-    padding: 10px 20px;
-    font-size: 18px;
-    font-weight: bold;
-    color: white;
-    background: linear-gradient(90deg, #ff7e5f, #feb47b);
-    border: none;
-    border-radius: 25px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    text-decoration: none;
-    text-align: center;
-    transition: all 0.3s ease-in-out;
-}
+        }
 
-.cart-button:hover {
-    background: linear-gradient(90deg, #feb47b, #ff7e5f);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-    transform: translateY(-2px);
-}
-
-.cart-button:active {
-    transform: translateY(0);
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
-}
+        .no-menu {
+            text-align: center;
+            font-size: 1.2em;
+            color: #ff6347;
+            margin-top: 20px;
         }
     </style>
     <script>
@@ -129,25 +147,33 @@
                 method: 'POST',
                 data: { menuId: menuId, quantity: quantity },
                 success: function(response) {
-                    alert("added the cart item successfully"); // Notify success
+                    alert("Added to cart successfully!"); // Notify success
                 },
                 error: function(xhr) {
-                    alert("Error: " + xhr.responseJSON.message); // Notify error
+                    alert("Error: " + (xhr.responseJSON ? xhr.responseJSON.message : "An error occurred")); // Notify error
+               
                 }
             });
         }
     </script>
 </head>
 <body>
+
+    <div class="navbar">
+        <a href="javascript:history.back()">Back</a>
+        <a href="home.jsp">Home</a>
+        <a href="cart.jsp" class="cart-button">Go to Cart</a>
+    </div>
+
     <h1>Menu Item Details</h1>
     
-    <a href="cart.jsp" class = "cart-button">Go to Cart</a>
     <div class="container">
         <% 
             // Get the menu list from the request
             List<Menu> menuList = (List<Menu>) request.getAttribute("menu");
             
             // Check if the menu list is not null and not empty
+           
             if (menuList != null && !menuList.isEmpty()) { 
                 // Loop through the menu list and display each item
                 for (Menu menu : menuList) {

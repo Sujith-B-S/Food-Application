@@ -1,0 +1,37 @@
+package com.sg.orderhistorydaoimpl;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+
+import com.sg.dbutil.MyConnection;
+import com.sg.oderhistorypojo.OrderHistory;
+
+public class OrderHistoryDAOImpl {
+	
+	private Connection con;
+	String insertQuery = "insert int `orderhistory`(`orderId`,`userId`,`restaurantId`,`total`,`status`) values (?,?,?,?,?)";
+	private PreparedStatement pstmt;
+	public OrderHistoryDAOImpl() {
+		con  = MyConnection.connect();
+		
+	}
+	
+	public int insertData(OrderHistory oh)
+	{
+		try {
+			
+			pstmt = con.prepareStatement(insertQuery);
+			pstmt.setInt(1, oh.getOrderId());
+			pstmt.setInt(1, oh.getUserId());
+			pstmt.setInt(1, oh.getRestaurantId());
+			pstmt.setDouble(1, oh.getTotal());
+			pstmt.setString(1, oh.getStatus());
+			
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+		return status;
+	}
+
+}

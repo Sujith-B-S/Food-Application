@@ -1,0 +1,194 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="java.util.*" %>
+<%@ page import="com.sg.cartitempojo.CartItem" %>
+<html>
+<head>
+    <title>Your Cart</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+            color: #FF5722;
+        }
+
+        .container {
+            margin: 20px auto;
+            max-width: 1200px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        th {
+            background-color: #FF5722;
+            color: white;
+        }
+
+        td img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+
+        .actions button, .navigation button {
+            padding: 8px 12px;
+            margin: 5px;
+            background-color: #FF5722;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .actions button:hover, .navigation button:hover {
+            background-color: #E64A19;
+        }
+
+        .total {
+            text-align: right;
+            font-weight: bold;
+            padding: 15px;
+            background-color: #f2f2f2;
+        }
+
+        .empty-cart {
+            text-align: center;
+            padding: 20px;
+            font-size: 18px;
+            color: #555;
+        }
+
+        .navigation {
+            margin: 20px;
+            text-align: center;
+        }
+
+        .checkout-btn {
+            display: block;
+            margin: 20px auto;
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .checkout-btn:hover {
+            background-color: #45a049;
+        }
+
+        @media screen and (max-width: 768px) {
+            table th, table td {
+                font-size: 14px;
+                padding: 10px;
+            }
+
+            td img {
+                width: 50px;
+                height: 50px;
+            }
+
+            .actions button, .navigation button {
+                font-size: 12px;
+            }
+        }
+    </style>
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+</head>
+<body>
+    <h1>Your Shopping Cart</h1>
+    <div class="navigation">
+        <button onclick="goBack()">Go Back</button>
+        <a href="GetRestaurant"><button>Home</button></a>
+        <a href="ClearCartItem"><button>Clear Cart</button></a>
+    </div>
+    <div class="container">
+        <%
+            Map<Integer, CartItem> cart = (Map<Integer, CartItem>) session.getAttribute("cart");
+            if (cart != null && !cart.isEmpty()) {
+        %>
+        <table>
+            <thead>
+                <tr>
+                    <th>Image</th>
+                    <th>Item Name</th>
+                    <th>Description</th>
+                    <th>Price (₹)</th>
+                    <th>Quantity</th>
+                    <th>Total (₹)</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% 
+                    double grandTotal = 0.0;
+                    for (CartItem item : cart.values()) {
+                        double total = item.getQuantity() * item.getPrice();
+                        grandTotal += total;
+                %>
+                <tr>
+                    <td><img src="<%= item.getImage() %>" alt="Item Image"></td>
+                    <td><%= item.getName() %></td>
+                    <td><%= item.getDescription() %></td>
+                    <td><%= item.getPrice() %></td>
+                    <td>
+                        <form action="UpdateCartItem" method="get">
+                            <input type="hidden" name="cartItemId" value="<%= item.getItemId() %>">
+                            <select name="quantity">
+                                <% for (int i = 1; i <= 10; i++) { %>
+                                    <option value="<%= i %>" <%= (i == item.getQuantity()) ? "selected" : "" %>><%= i %></option>
+                                <% } %>
+                            </select>
+                        </form>
+                    </td>
+                    <td><%= total %></td>
+                    <td class="actions">
+                        <a href="UpdateCartItem?cartItemId=<%= item.getItemId() %>"><button>Update</button></a>
+                        <a href="RemoveCartItem?cartItemId=<%= item.getItemId() %>"><button>Delete</button></a>
+                    </td>
+                </tr>
+                <% } %>
+                <tr>
+                    <td colspan="5" class="total">Grand Total:</td>
+                    <td colspan="2"><%= grandTotal %></td>
+                </tr>
+            </tbody>
+        </table>
+        <a href="#" class="checkout-btn">Check Out</a>
+        <% } else { %>
+        <div class="empty-cart">Your cart is empty.</div>
+        <% } %>
+    </div>
+</body>
+</html>

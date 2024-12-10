@@ -1,0 +1,18 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>CheckOut</title>
+</head>
+<body>
+	<form action="">
+		Address : <input type = "text" name = "address"><br><br>
+		<input type = "radio" name = "creditcard" value = "Credit Card">
+		<input type = "radio" name = "upi" value = "UPI">
+		<input type = "radio" name = "cash" value = "Cash on Delivery">
+	
+	</form>
+</body>
+</html>

@@ -3,6 +3,7 @@ package com.sg.menudaoimpl;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,9 +17,11 @@ public class MenuDAOImpl implements MenuDAO{
 	private Connection con;
 	String fetchOnIdQuery = "select * from `menu` where `restaurantId` = ?";
 	String getMenuQuery = "select * from `menu` where `menuId` = ?";
+	String getRatedMenu = "select * from `menu` where `rating` >= ?";
 	private PreparedStatement pstmt;
 	private ResultSet resultSet;
 	private Menu menu;
+	private List<Menu> hrmList;
 
 	public MenuDAOImpl() {
 
@@ -89,6 +92,23 @@ public class MenuDAOImpl implements MenuDAO{
 	        e.printStackTrace();
 	    }
 	    return menuList;
+	}
+	
+	@Override
+	public List<Menu> getRatedMenu(double rating) {
+
+		try {
+			pstmt = con.prepareStatement(getRatedMenu);
+			pstmt.setDouble(1, rating);
+			resultSet = pstmt.executeQuery();
+			
+			 hrmList = extractMenuListFromResultSet(resultSet);
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return hrmList;
 	}
 
 		

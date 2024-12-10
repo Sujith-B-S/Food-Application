@@ -1,0 +1,37 @@
+package com.sg.orderitemdaoimpl;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
+import com.sg.dbutil.MyConnection;
+import com.sg.orderitempojo.OrderItem;
+
+public class OrderItemDAOImpl {
+	
+	private Connection con;
+	String insertQuery = "insert into `orderitem`(`orderId`,`menuId`,`quantity`,`itemTotal`) values (?,?,?,?)";
+	private PreparedStatement pstmt;
+
+	public OrderItemDAOImpl() {
+
+		con = MyConnection.connect();
+	}
+	
+	public void insertData(OrderItem oi)
+	{
+		try {
+			pstmt = con.prepareStatement(insertQuery);
+			pstmt.setInt(1, oi.getOrderId());
+			pstmt.setInt(2, oi.getMenuId());
+			pstmt.setInt(3, oi.getQuantity());
+			pstmt.setDouble(4, oi.getItemTotal());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+	}
+
+}

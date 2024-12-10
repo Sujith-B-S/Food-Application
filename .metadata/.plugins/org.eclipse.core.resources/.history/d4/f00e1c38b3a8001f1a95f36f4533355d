@@ -1,0 +1,165 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="java.util.*" %>
+<%@ page import="com.sg.cartitempojo.CartItem" %>
+
+<html>
+<head>
+    <title>Your Cart</title>
+    <style>
+        h1 {
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            margin: 20px auto;
+            width: 80%;
+            font-family: Arial, sans-serif;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f8f9fa;
+            color: #333;
+        }
+
+        .total {
+            text-align: right;
+            font-weight: bold;
+            background-color: #f8f9fa;
+        }
+
+        img {
+            width: 80px;
+            height: 80px;
+            border-radius: 4px;
+        }
+
+        button, select {
+            padding: 8px 12px;
+            background-color: #FF734C;
+            border: none;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: Arial, sans-serif;
+        }
+
+        button:hover {
+            background-color: #ff3d00;
+        }
+
+        .actions {
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .empty-cart {
+            text-align: center;
+            font-size: 18px;
+            color: #777;
+        }
+
+        .grand-total {
+            font-size: 18px;
+            text-align: right;
+            padding-right: 12px;
+        }
+    </style>
+    <script>
+        // Update cart item quantity on dropdown change
+        function updateQuantity(cartItemId, selectElement) {
+            const quantity = selectElement.value;
+            window.location.href = `UpdateCartItem?cartItemId=${cartItemId}&quantity=${quantity}`;
+        }
+
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+</head>
+<body>
+    <h1>Your Shopping Cart</h1>
+    <div class="actions">
+        <button onclick="goBack()">Go Back</button>
+        <a href="GetRestaurant"><button>Home</button></a>
+        <a href="ClearCartItem"><button>Clear Cart</button></a>
+    </div>
+
+    <%
+        // Retrieve the cart from the session
+        Map<Integer, CartItem> cart = (Map<Integer, CartItem>) session.getAttribute("cart");
+
+        if (cart != null && !cart.isEmpty()) {
+    %>
+    <div class="container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Image</th>
+                    <th>Item Name</th>
+                    <th>Description</th>
+                    <th>Price (₹)</th>
+                    <th>Total (₹)</th>
+                    <th>Quantity</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% 
+                    double grandTotal = 0.0;
+                    for (CartItem item : cart.values()) {
+                        double total = item.getQuantity() * item.getPrice();
+                        grandTotal += total;
+                %>
+                <tr>
+                    <td><img src="<%= item.getImage() %>" alt="Item Image"></td>
+                    <td><%= item.getName() %></td>
+                    <td><%= item.getDescription() %></td>
+                    <td>₹<%= item.getPrice() %></td>
+                    <td>₹<%= total %></td>
+                    <td>
+                        <select onchange="updateQuantity(<%= item.getItemId() %>, this)">
+                            <% 
+                                for (int i = 1; i <= 10; i++) {
+                            %>
+                            <option value="<%= i %>" <%= (i == item.getQuantity()) ? "selected" : "" %>><%= i %></option>
+                            <% 
+                                }
+                            %>
+                        </select>
+                    </td>
+                </tr>
+                <% } %>
+                <tr>
+                    <td colspan="4" class="total">Grand Total:</td>
+                    <td colspan="2" class="grand-total">₹<%= grandTotal %></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="actions">
+        <a href="#"><button>Check Out</button></a>
+    </div>
+    <%
+        } else {
+    %>
+    <p class="empty-cart">Your cart is empty.</p>
+    <% 
+        } 
+    %>
+</body>
+</html>

@@ -1,0 +1,102 @@
+package com.sg.servlets;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Map;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.sg.cartitempojo.CartItem;
+import com.sg.oderhistorypojo.OrderHistory;
+import com.sg.orderhistorydaoimpl.OrderHistoryDAOImpl;
+import com.sg.orderitemdaoimpl.OrderItemDAOImpl;
+import com.sg.orderitempojo.OrderItem;
+import com.sg.ordersdaoimpl.OrdersDAOImpl;
+import com.sg.orderspojo.Orders;
+import com.sg.userpojo.User;
+
+@WebServlet("/SaveOrders")
+public class SaveOrders extends HttpServlet {
+
+    @Override
+    protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        PrintWriter pw = resp.getWriter();
+        User loggedInUser = (User) req.getSession().getAttribute("loggedInUser");
+
+        if (loggedInUser == null) {
+            // Redirect to login if the user is not authenticated
+            resp.sendRedirect("invalidUser.jsp");
+            return;
+        }
+
+        int userId = loggedInUser.getUid();
+
+        // Retrieve cart from session
+        Map<Integer, CartItem> cart = (Map<Integer, CartItem>) req.getSession().getAttribute("cart");
+        if (cart == null || cart.isEmpty()) {
+            resp.sendRedirect("emptyCart.jsp"); // Redirect to empty cart page
+            return;
+        }
+
+        // DAO Instances
+        OrdersDAOImpl ordersDAO = new OrdersDAOImpl();
+        OrderItemDAOImpl orderItemDAO = new OrderItemDAOImpl();
+        OrderHistoryDAOImpl orderHistoryDAO = new OrderHistoryDAOImpl();
+
+        try {
+            // Process each item in the cart
+            for (CartItem cartItem : cart.values()) {
+
+                // Create and insert order
+                Orders order = new Orders();
+                order.setUserId(userId);
+                order.setRestuarantId(cartItem.getRestaurantId());
+                order.setMenuId(cartItem.getItemId());
+                order.setQuantity(cartItem.getQuantity());
+                order.setTotal(cartItem.getQuantity() * cartItem.getPrice());
+                order.setPayment("UPI");
+                order.setStatus("Delivered");
+
+                ordersDAO.inserData(order);
+
+                // Retrieve the latest inserted order
+                Orders insertedOrder = ordersDAO.getMaxOrderId();
+
+                // Create and insert order item
+                OrderItem orderItem = new OrderItem(
+                        insertedOrder.getOrderId(),
+                        insertedOrder.getMenuId(),
+                        insertedOrder.getQuantity(),
+                        insertedOrder.getTotal()
+                );
+                orderItemDAO.insertData(orderItem);
+
+                // Create and insert order history
+                OrderHistory orderHistory = new OrderHistory(
+                        insertedOrder.getOrderId(),
+                        insertedOrder.getUserId(),
+                        insertedOrder.getRestuarantId(),
+                        insertedOrder.getTotal(),
+                        insertedOrder.getStatus()
+                );
+                orderHistoryDAO.insertData(orderHistory);
+            }
+
+            // Clear the cart after successful processing
+            req.getSession().removeAttribute("cart");
+
+            // Redirect to success page
+            resp.sendRedirect("orderSuccess.jsp");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Redirect to error page in case of exceptions
+            resp.sendRedirect("errorPage.jsp");
+        }
+    }
+}

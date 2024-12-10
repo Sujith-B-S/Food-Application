@@ -1,0 +1,31 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>CheckOut</title>
+</head>
+<body>
+	<form action="">
+		Address : <input type = "text" name = "address"><br><br>
+		<label>Payment Method : </label>
+		<input type="radio" id="cc" name="paymentMethod" value="Credit Card" checked>
+	    <label for="cc">Credit Card</label>
+	
+	    <input type="radio" id="upi" name="paymentMethod" value="UPI">
+	    <label for="upi">UPI</label>
+	
+	    <input type="radio" id="cash" name="paymentMethod" value="Cash on Delivery">
+	    <label for="cash">Cash on Delivery</label>
+		
+	    <input type="radio" id="net" name="paymentMethod" value="Net Banking">
+	    <label for="cash">Net Banking</label>
+	    
+	    <input type = "submit" value = "Confirm Payment">
+		
+		
+	
+	</form>
+</body>
+</html>

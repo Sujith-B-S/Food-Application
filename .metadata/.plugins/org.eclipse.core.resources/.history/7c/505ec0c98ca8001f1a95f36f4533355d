@@ -1,0 +1,28 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>CheckOut</title>
+</head>
+<body>
+	<form action="">
+		Address : <input type = "text" name = "address"><br><br>
+		<input type = "radio" id = "cc" name = "creditcard" value = "Credit Card">
+		<label for = "cc">Credit Card</label>
+		<input type = "radio" id = "upi" name = "upi" value = "UPI">
+		<label for = "upi">UPI</label>
+		<input type = "radio" id = "cash" name = "cash" value = "Cash on Delivery">
+		<label for = "cash">Cash on Delivery</label>
+		
+		<input type="radio" id="cc" name="creditcard" value="Credit Card">
+  <label for="html">Credit Card</label><br>
+  <input type="radio" id="upi" name="Upi" value="UPI">
+  <label for="upi">CSS</label><br>
+  <input type="radio" id="cod" name="cash" value="Cash on Delivery">
+  <label for="cod">Cash on Delivery</label>
+	
+	</form>
+</body>
+</html>

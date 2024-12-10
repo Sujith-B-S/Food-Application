@@ -1,6 +1,7 @@
 package com.sg.restaurantdaoimpl;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -18,6 +19,7 @@ public class RestaurantDAOImpl implements RestaurantDAO{
 	private Connection con;
 	private Statement stmt;
 	private ResultSet resultSet;
+	private PreparedStatement pstmt;
 
 	public RestaurantDAOImpl() {
 		
@@ -67,6 +69,22 @@ public class RestaurantDAOImpl implements RestaurantDAO{
 		return resList;
 	}
 	
+	public String getRestaurantImageById(int restaurantId) {
+	    String imageUrl = null;
+	    String query = "SELECT image FROM restaurant WHERE restaurantId = ?";
+	    
+	    try {
+	    	 pstmt = con.prepareStatement(query);
+	        pstmt.setInt(1, restaurantId);
+	        ResultSet rs = pstmt.executeQuery();
+	        if (rs.next()) {
+	            imageUrl = rs.getString("image");
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return imageUrl;
+	}
 	
 
 }

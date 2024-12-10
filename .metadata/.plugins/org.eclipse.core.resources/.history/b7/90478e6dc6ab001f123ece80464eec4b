@@ -1,0 +1,44 @@
+package com.sg.servlets;
+		
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Map;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.sg.cartitempojo.CartItem;
+import com.sg.userpojo.User;
+		
+/**		
+ * Servlet implementation class SaveOrders
+ */		
+@WebServlet("/SaveOrders")
+public class SaveOrders extends HttpServlet {
+		
+		
+	@Override
+    protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		
+		
+		User u = (User) req.getSession().getAttribute("loggedInUser");
+		
+		if (u != null) {
+		    int userId = u.getUid(); 
+		    PrintWriter pw = resp.getWriter();
+		    pw.println(userId);
+		}
+		else 
+		{
+			resp.sendRedirect("invalidUser.jsp");
+		}
+		
+		Map<Integer, CartItem> cart = (Map<Integer, CartItem>) req.getSession().getAttribute("cart");
+	}	
+}		
+		
+		
+		
